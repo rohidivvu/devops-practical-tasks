@@ -1,0 +1,29 @@
+---
+- name: Configure Nginx and deploy Node.js app
+  hosts: all
+  become: true
+  tasks:
+    - name: Install Nginx
+      yum:
+        name: nginx
+        state: present
+
+    - name: Start and enable Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Install Node.js
+      yum:
+        name: nodejs
+        state: present
+
+    - name: Copy application files
+      copy:
+        src: /home/ec2-user/ansible/task1-nodejs-docker/
+        dest: /usr/share/nginx/html/
+
+    - name: Start Node.js Application
+      command: node /usr/share/nginx/html/index.js
+
